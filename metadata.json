@@ -1,0 +1,7 @@
+{
+  "name": "Topography Kit Checklist",
+  "description": "A comprehensive checklist application for topography equipment kits. It allows users to verify item presence, upload photos, and generate a signed PDF report.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
