@@ -20,8 +20,8 @@ const PhotoSection: React.FC<PhotoSectionProps> = ({ photos, onAddPhotos, onRemo
   };
 
   return (
-    <section className="p-6 border-t border-gray-200">
-      <h2 className="text-lg font-bold text-gray-700 mb-4">FOTOS GERAIS DO KIT <span className="text-red-500">*</span></h2>
+    <section className="p-6 border-t border-gray-200 dark:border-gray-700">
+      <h2 className="text-lg font-bold text-gray-700 dark:text-gray-300 mb-4">FOTOS GERAIS DO KIT <span className="text-red-500">*</span></h2>
       <div className="flex flex-col items-center">
         <input
           type="file"

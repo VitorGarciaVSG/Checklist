@@ -9,12 +9,12 @@ interface SignatureSectionProps {
 const SignatureSection: React.FC<SignatureSectionProps> = ({ canvasRef, onClear }) => (
     <section className="p-6">
         <div className="mt-4">
-            <label className="block text-center font-semibold mb-2">ASSINATURA OFICIAL RESPONSÁVEL <span className="text-red-500">*</span></label>
+            <label className="block text-center font-semibold mb-2 dark:text-gray-300">ASSINATURA OFICIAL RESPONSÁVEL <span className="text-red-500">*</span></label>
             <div className="flex flex-col items-center">
                 <canvas 
                     ref={canvasRef} 
                     id="signature-pad" 
-                    className="border border-gray-400 rounded-md bg-gray-50 w-full max-w-md h-40 touch-none"
+                    className="border border-gray-400 rounded-md bg-gray-50 dark:bg-gray-700 dark:border-gray-500 w-full max-w-md h-40 touch-none"
                 ></canvas>
                 <button 
                     onClick={onClear} 

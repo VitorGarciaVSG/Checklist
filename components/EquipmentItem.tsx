@@ -14,11 +14,11 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({ item, status, onStatusCha
   const isAbsent = status === 'Ausente';
   
   return (
-    <div className="border-b border-gray-200 p-4 flex flex-col sm:flex-row items-center gap-6">
+    <div className="border-b border-gray-200 dark:border-gray-700 p-4 flex flex-col sm:flex-row items-center gap-6">
       <img
         src={item.image}
         alt={`Imagem de ${item.name}`}
-        className={`${sizeClasses} object-contain flex-shrink-0`}
+        className={`${sizeClasses} object-contain flex-shrink-0 bg-white rounded-md`}
         onError={(e) => {
           const target = e.target as HTMLImageElement;
           target.onerror = null;
@@ -26,10 +26,10 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({ item, status, onStatusCha
         }}
       />
       <div className="flex-1 text-center sm:text-left w-full">
-        <h3 className="text-xl font-bold text-gray-800">{item.name}</h3>
+        <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">{item.name}</h3>
         <div className="mt-3 flex justify-center sm:justify-start gap-4">
           <label 
-            className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-all duration-200 ease-in-out ${isPresent ? 'bg-green-100 border-green-400 text-green-800' : 'border-gray-300'}`}
+            className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-all duration-200 ease-in-out ${isPresent ? 'bg-green-100 border-green-400 text-green-800 dark:bg-green-900/50 dark:border-green-600 dark:text-green-300' : 'border-gray-300 dark:border-gray-600'}`}
           >
             <input
               type="radio"
@@ -42,7 +42,7 @@ const EquipmentItem: React.FC<EquipmentItemProps> = ({ item, status, onStatusCha
             <span className={isPresent ? 'font-semibold' : ''}>Presente</span>
           </label>
           <label
-            className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-all duration-200 ease-in-out ${isAbsent ? 'bg-red-100 border-red-400 text-red-800' : 'border-gray-300'}`}
+            className={`flex items-center gap-2 cursor-pointer px-4 py-2 rounded-lg border transition-all duration-200 ease-in-out ${isAbsent ? 'bg-red-100 border-red-400 text-red-800 dark:bg-red-900/50 dark:border-red-600 dark:text-red-300' : 'border-gray-300 dark:border-gray-600'}`}
           >
             <input
               type="radio"

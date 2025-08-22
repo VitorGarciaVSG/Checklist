@@ -11,10 +11,10 @@ export const EQUIPMENTS: Equipment[] = [
 ];
 
 export const TEAM_ASSET_MAP: Record<string, string> = {
-    'Equipe 1 - Bruno': '80803',
-    'Equipe 2 - Jefferson': '80804',
+    'Equipe 1 - Bruno': '80811',
+    'Equipe 2 - Jefferson': '80812',
     'Equipe 3 - Francivaldo': '80805',
-    'ESTOQUE': '80806'
+    'Equipe 4 - Alexandro': '80807'
 };
 
 export const TEAMS = Object.keys(TEAM_ASSET_MAP);

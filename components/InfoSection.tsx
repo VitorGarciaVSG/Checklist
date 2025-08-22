@@ -18,37 +18,37 @@ const InfoSection: React.FC<InfoSectionProps> = ({ formData, onFormChange }) => 
     };
 
     return (
-        <section className="p-6 border-t border-gray-200">
+        <section className="p-6 border-t border-gray-200 dark:border-gray-700">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
-                    <label htmlFor="report-date" className="block text-sm font-medium text-gray-700">Data</label>
+                    <label htmlFor="report-date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Data</label>
                     <input 
                         type="date" 
                         id="report-date" 
                         value={formData.reportDate}
                         onChange={(e) => onFormChange('reportDate', e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-gray-50" 
+                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-gray-50 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" 
                     />
                 </div>
                 <div>
-                    <label htmlFor="team-member" className="block text-sm font-medium text-gray-700">Equipe <span className="text-red-500">*</span></label>
+                    <label htmlFor="team-member" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Equipe <span className="text-red-500">*</span></label>
                     <select 
                         id="team-member"
                         value={formData.teamMember}
                         onChange={handleTeamChange}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     >
                         <option value="">Selecione a equipe</option>
                         {TEAMS.map(team => <option key={team} value={team}>{team}</option>)}
                     </select>
                 </div>
                 <div>
-                    <label htmlFor="asset-number" className="block text-sm font-medium text-gray-700">Coletora RTK - patrimonio <span className="text-red-500">*</span></label>
+                    <label htmlFor="asset-number" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Coletora RTK - patrimonio <span className="text-red-500">*</span></label>
                     <select 
                         id="asset-number" 
                         value={formData.assetNumber}
                         onChange={(e) => onFormChange('assetNumber', e.target.value)}
-                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                        className="mt-1 block w-full border border-gray-300 rounded-md p-3 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     >
                         <option value="">Selecione um patrimônio</option>
                         {ASSETS.map(asset => <option key={asset} value={asset}>{asset}</option>)}

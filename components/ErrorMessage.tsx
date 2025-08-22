@@ -11,7 +11,7 @@ const ErrorMessage: React.FC<ErrorMessageProps> = ({ errors }) => {
   }
 
   return (
-    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg relative mb-4 w-full" role="alert">
+    <div className="bg-red-100 border border-red-400 text-red-700 dark:bg-red-900/40 dark:border-red-500 dark:text-red-300 px-4 py-3 rounded-lg relative mb-4 w-full" role="alert">
       <strong className="font-bold">Erro de preenchimento!</strong>
       <ul className="list-disc list-inside mt-2 text-sm">
         {errors.map((error, index) => (

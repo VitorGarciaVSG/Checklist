@@ -1,7 +1,7 @@
 
 import React, { useRef, useEffect, useCallback } from 'react';
 
-export const useSignaturePad = () => {
+export const useSignaturePad = ({ theme }: { theme: string }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const isDrawing = useRef(false);
 
@@ -85,7 +85,7 @@ export const useSignaturePad = () => {
             const ctx = canvas.getContext('2d');
             if (ctx) {
                 ctx.scale(ratio, ratio);
-                ctx.strokeStyle = "#000000";
+                ctx.strokeStyle = theme === 'dark' ? "#FFFFFF" : "#000000";
                 ctx.lineWidth = 2;
             }
         };
@@ -111,7 +111,7 @@ export const useSignaturePad = () => {
             canvas.removeEventListener('touchmove', draw);
             canvas.removeEventListener('touchend', stopDrawing);
         };
-    }, [startDrawing, draw, stopDrawing]);
+    }, [startDrawing, draw, stopDrawing, theme]);
 
     return { canvasRef, clearSignature, isCanvasBlank };
 };

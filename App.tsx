@@ -1,5 +1,5 @@
 
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import type { FormData, EquipmentStatus, Photo } from './types';
 import { EQUIPMENTS } from './constants';
 import { useSignaturePad } from './hooks/useSignaturePad';
@@ -23,8 +23,30 @@ const App: React.FC = () => {
     const [photos, setPhotos] = useState<Photo[]>([]);
     const [errors, setErrors] = useState<string[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [theme, setTheme] = useState(() => {
+        if (typeof window !== 'undefined' && window.localStorage) {
+            const storedTheme = window.localStorage.getItem('theme');
+            if (storedTheme) return storedTheme;
+            if (window.matchMedia('(prefers-color-scheme: dark)').matches) return 'dark';
+        }
+        return 'light';
+    });
     
-    const { canvasRef, clearSignature, isCanvasBlank } = useSignaturePad();
+    const { canvasRef, clearSignature, isCanvasBlank } = useSignaturePad({ theme });
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+    };
 
     const handleFormChange = useCallback((field: keyof FormData, value: string) => {
         setFormData(prev => ({ ...prev, [field]: value }));
@@ -73,6 +95,7 @@ const App: React.FC = () => {
 
     const handleGenerateReport = async () => {
         if (!validateForm()) {
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
             return;
         }
         setIsLoading(true);
@@ -91,13 +114,13 @@ const App: React.FC = () => {
         <>
             {isLoading && <Loader />}
             <div className="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
-                <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-                    <Header />
+                <div className="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+                    <Header theme={theme} toggleTheme={toggleTheme} />
                     <InfoSection formData={formData} onFormChange={handleFormChange} />
                     <EquipmentList statuses={equipmentStatus} onStatusChange={handleStatusChange} />
                     <PhotoSection photos={photos} onAddPhotos={handleAddPhotos} onRemovePhoto={handleRemovePhoto} />
-                    <section className="p-6 border-t border-gray-200">
-                        <div className="bg-gray-100 border-l-4 border-gray-500 text-gray-700 p-4 rounded-md" role="alert">
+                    <section className="p-6 border-t border-gray-200 dark:border-gray-700">
+                        <div className="bg-gray-100 dark:bg-gray-700/50 border-l-4 border-gray-500 dark:border-gray-400 text-gray-700 dark:text-gray-300 p-4 rounded-md" role="alert">
                             <p className="font-bold">Termo de Responsabilidade</p>
                             <p className="text-sm">Declaro estar ciente de que todos os equipamentos e informações descritos neste documento são de minha inteira responsabilidade, assumindo o compromisso de zelar por sua integridade e segurança.</p>
                         </div>
@@ -107,23 +130,23 @@ const App: React.FC = () => {
             </div>
 
             {/* Mobile Footer */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg flex flex-col items-center z-40">
+            <div className="md:hidden sticky bottom-0 left-0 right-0 bg-white dark:bg-gray-800/80 dark:backdrop-blur-sm border-t border-gray-200 dark:border-gray-700 p-4 shadow-lg flex flex-col items-center z-40">
                 <ErrorMessage errors={errors} />
                 <button onClick={handleGenerateReport} className="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md w-full">
                     <i className="fas fa-file-pdf mr-2"></i>Gerar Relatório em PDF
                 </button>
             </div>
-             {/* Add padding to body to avoid content being hidden by fixed footer */}
+             {/* Add padding to body to avoid content being hidden by fixed footer on mobile */}
             <div className="pb-28 md:hidden"></div>
 
             {/* Desktop Buttons */}
             <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-4xl hidden md:block">
-                <div className="mt-8 pt-6 border-t border-gray-300 flex flex-col items-center gap-4">
+                <div className="mt-8 pt-6 border-t border-gray-300 dark:border-gray-600 flex flex-col items-center gap-4">
                      <ErrorMessage errors={errors} />
                      <button onClick={handleGenerateReport} className="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors shadow-md w-full sm:w-auto">
                         <i className="fas fa-file-pdf mr-2"></i>Gerar Relatório em PDF
                     </button>
-                     <p className="text-sm text-gray-500 text-center mt-2">
+                     <p className="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">
                         <strong>Instruções:</strong> 1. Preencha os campos. 2. Marque o status de cada item. 3. Adicione fotos. 4. Gere o PDF.
                     </p>
                 </div>

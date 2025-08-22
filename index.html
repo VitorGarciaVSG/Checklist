@@ -14,21 +14,45 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        .hidden {
+            display: none;
+        }
     </style>
+<script>
+  // Prevents FOUC (Flash of Unstyled Content) by applying the theme before the page loads.
+  if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+  }
+</script>
 <script type="importmap">
 {
   "imports": {
     "react/": "https://esm.sh/react@^19.1.1/",
-    "react": "https://esm.sh/react@^19.1.1",
-    "react-dom/": "https://esm.sh/react-dom@^19.1.1/"
+    "react": "https://esm.sh/react@^19.1.1"
   }
 }
 </script>
 </head>
-<body class="bg-gray-100">
-    <div id="root"></div>
-    <!-- This div is used by the PDF generator and is kept off-screen -->
-    <div id="report-container" style="position: absolute; left: -9999px; top: 0; width: 800px; background: white;"></div>
-    <script type="module" src="/index.tsx"></script>
-</body>
-</html>
+<body class="bg-gray-100 dark:bg-gray-900">
+    <!-- Loader -->
+    <div id="loader" class="hidden fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div class="border-8 border-gray-200 border-t-8 border-t-blue-500 rounded-full w-16 h-16 animate-spin"></div>
+    </div>
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8 max-w-4xl">
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-xl overflow-hidden">
+            <!-- Header -->
+            <header class="relative p-6 flex flex-col sm:flex-row justify-between items-center bg-blue-900 text-white rounded-t-xl text-center sm:text-left">
+                <div class="absolute top-4 right-4">
+                     <button id="theme-toggle" class="text-blue-200 hover:text-white hover:bg-white/10 rounded-full w-10 h-10 flex items-center justify-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-blue-900 focus:ring-white transition-colors" aria-label="Alternar tema">
+                        <i id="theme-icon" class="fas fa-moon text-lg"></i>
+                    </button>
+                </div>
+                <div class="order-2 sm:order-1">
+                    <p class="text-sm font-semibold text-blue-200">CHECKLIST</p>
+                    <h1 class="text-3xl sm:text-4xl font-bold">KIT TOPOGRAFIA</h1>
+                    <p class="text-md text-blue-300 mt-1">PANPP</p>
+                </div>
+                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAA5CAYAAABaFNsSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAsYSURBVHhe7d17kJxVfcDx7yqJBCsR0oQEYyEYKkFCEiJIoUBCICSEISEhCUSCUCohQchQSkEJBCRESCGgkJCEBCRIIEQhIQgI2f/e59zZ3fN+9943s7v3zD7nf/59nm/fzJv3zcy3e+98++43c+s0NzcDAAAAwPyJgDcAAGB+RMAGAAA0i4ANAAAYFwEbAADQLAIf/PjHP/bggw/23HPP/fDDD0e719bWvn379p/vfvf7I17s+PHj9/b2fuqpp5555pmf/exnv/rVr1577bUnn3zyN7/5zS+//PKzn/3s2LFjP/7xj//whz98//33x96z3r17X3zxxVe+8pWx7w8++OCPfvSjL3zhC5s2bbrqqqseeeSR1atXT5s2bfr06Rtt1aFDh8aOHfuFL3zhK1/5yuTJk5cuXXrFFVe88MILM2fOnDhx4vTp06dOnfqlL33pnXfeeeihh2688cYnn3wyY2y8cOHCm2666aGHHnrJJZfMnz9/ypQpM2bMeOqpp/7yl7+855577rjjjp06dTp6o97U1PTyyy9/4xvf+O1vf/vhhx8edw8AACAWRcAGAABwRgRsAADAMBGwAQAAzSLgAgCA2H/00Uf93e9+11/+8pd+9KMf9eCDD/bwww/3T3/6Uz/5yU96+umn+1e/+lUf/OAHM3o9AwAA+B0BGwCA2BcBGwCA+BMBGwAAMK4eKxYAwKxMmTIFg/51rY+N/48//ni/9a1v9a9//Ws/9thjfeUrX+nBBx/sM88806985Sv9+te/7mc+8xl/61vf9kc/+lHf+MY3mjJlyj/+8Y/t7e39+OOPX3PNNX/84x+PGtq1a9cjjzzys5/97Ec/+tH9+/ffcsstP/nJT37uc597/PHHX3HFFbfddtvZZ5/9+c9/vuuuu8a8lV577bW/+MUvHn300bfccstDDz30l7/85VNPPXV+9+vXr18t5W233fayyy477bTT/vCHP/zlL3/53nvvvfbaa+677z7A21wAAIDfEbABAIj9Y8eO9Sc/+UnPPO8Fq2+77bY++MEP9s1vfpre3l5/97vf9Zvf/Ka/8IUv9NZbbyWb+bnnnusa87p3796ffvqp//KXv/SBD3yg73//+/23v/0t7G2eM2dOP/nJT/qDH/ygP/zhD+t+fuedd/qTn/ykv/zlL/385z9vypQp/elPf/qDH/yg//jHP3riiSf6U5/6VL/z3e+2p6enP/7xj/2Xv/wl7q2o+97w8ssvX3TRRddff/0vf/nL9evX7969+4c//OGnnnqqyq/Gjh372c9+NmbY7NmzX3LJJQcffPCNN944bvyMGTNeeeWVJ5xwQiXJ6XT65ZdfvnPnzhlnnLFr1y70BwAA6E7ABgAgrN27d/eXv/ylP/zhD7u6unrXXXf19a9/vV/+8pcZN60XXnhB39sY0NXV1dXV1b322mv19l988UV/8YtfrK+v77jjjkM7eEaMGNHR0dHe3t7e3t7S0tLT09PX11fXV/X1jfr6+vb29vb29iZMmNDe3t7Z2dmq61h86qmnfvazn/3oRz86duzYzz//fMeOHffee++ZZ56ZM2fONddcc8kllzz++ONPPvnk0ksvPW/evAcffDC21Wq77bbbb7/98ssv//DDD2/YsOHyyy8/fPzxx/q88cYbr7nmmh//+MeffvrpAwAA2K0eKxYAwJg2bdqUKVP62Mc+1r333tvXX3/dM8880/vf/36//e1v+6c//Wkf/OAH29vb++tf/7q/973vJcty//33d2y2bt26WjW9ePHiv/nNbzZu3NiUKVN++MMf9tprrw2X8QceeOD++++PO7a8vb3PPffcn/70p//xj3/U1zXGjx//b//2b/vtt98BvM0FAACAvxGwAQAI62tf+1rPPfdcTz31VNeuXTs6Oqq1/+IXv2hvby85Fv6LX/yi3/rWt/rlL3/Z//zP/zzttNM6Ojoq6o8ePdrFixd/+MMf9s477wzZ4pIlS2Kz/P3vf7+//OUvf//73w/z+l1e84knnmhoaOi73/3u0aNHe2B/++2397vf/W7Q7gMAADiGgA0AQGgLFiyIoO9973t97Wtfq78uXLgw4m1PPvnkE044wS1btgwZMiSS7S0tLd1xxx0jWc+ePfuaa66ZOHHiiSeeGOs148aNq+QJ8uMf/7h614kTJ1atWrV37976+vrAwM8++2xDQ0PXrl07cuRIX1/fAw88sH///lWrVs2YMeOEE0444YQTOnfurK+/AwAAOIWABQAAmEWABAABOI6ADQAAGCcrbQIAYNpWrVq1bt26zTff3E9+8pO+9rWv9Z3vfKe///3vPfrIIz3//PN9+OGH/eUvf1mv64ULFz7zzDN1f6urq19zzTWPPvpof3t7++tf//rTn/60z3/+85kyZUrPP/98rA4AABT0WLEAAEzbsGHDhx9+2Pvvv99dd93VL37xC3/xi19k1CqjR49+/PHH++yzz/rTn/6U1eYXX3wxYh744osv9qc//SlOAwAAGIiADQBAaEuXLs34K1q2bNmoUaOvvvrqM888M3bs2GHDhq2srOzbb79dvb/85S+bMmXKxIkTzzzzTNMm7I0ePfo///M/X3jhhdWrV4+y5uXLl3/2s5/9xS9+sW7dunfffXf16tUXL178/e9/v2LFiqFDh954443R0dEnn3xy+/btW1lZeeihh26//fbnnnvukUceeeKJJ2pra9va2u6///5jx46trq6+9957L7/88vXXX//aa6/df//9f//734+wXwAAwBUEbAAAwvbu3fvBBx/spz/9aY8//niPPfZYjzzyn73e+eSTT+6//+Xz3S7e3t7e/uUvf/mzzz7buXNnrP/KK698+OGHr7322rVr13Z0dDzzjDN/++N//GfR9j/60Y8WLVo0dOjQUUcddeihh9500021tbXnn3/+iSeeyBjqOjs7z5s372tf+9rZZ5/92muvXbhw4Xvvvbfqqvfee++jjjrq5ptvvmHDhldeeWV5efl3v/vd8ePHNzY2bt++fWtr67Jly44ePTpm8e7du3/6059WrVoV/wQAAAgGARsAhLJq1arFixcvWrQoxl
