@@ -1,0 +1,57 @@
+# Workflow para fazer o build e deploy de um site estático para o GitHub Pages
+name: Deploy Static Content to Pages
+
+on:
+  # Executa quando um push é feito para a branch `main`
+  push:
+    branches: ["main"]
+
+  # Permite que você execute este workflow manualmente pela aba Actions
+  workflow_dispatch:
+
+# Define as permissões para o GITHUB_TOKEN para permitir o deploy no GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Permite apenas um deploy concorrente, cancelando execuções antigas
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  # Job de build
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20 # Use a versão do Node.js que seu projeto precisa
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install # Ou 'npm ci' que é mais rápido e seguro para automação
+      - name: Build
+        run: npm run build # Este é o comando que compila seu projeto
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Pasta onde o build foi gerado. Geralmente é 'dist' ou 'build'
+          path: './dist' # <-- MUITO IMPORTANTE: Verifique se essa é a pasta correta!
+      
+  # Job de deploy
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
